@@ -22,9 +22,22 @@
   <Namespace>Serilog.Formatting.Raw</Namespace>
   <Namespace>Serilog.Parsing</Namespace>
   <Namespace>Serilog.Sinks.SystemConsole.Themes</Namespace>
+  <Namespace>System.Net</Namespace>
+  <Namespace>System.Runtime.InteropServices</Namespace>
 </Query>
 
 const string HOST_FILE = @"c:\windows\system32\drivers\etc\hosts";
+
+public static class DnsFlusher
+{
+	[DllImport("dnsapi.dll", EntryPoint = "DnsFlushResolverCache")]
+	private static extern UInt32 DnsFlushResolverCache();
+
+	public static void Flush()
+	{
+		UInt32 result = DnsFlushResolverCache();
+	}
+}
 
 public class Options
 {
@@ -105,4 +118,5 @@ void Main(string[] args)
 		lines = lines.Except(options.UnblockOptions.Domains.Select(x => $"127.0.0.1 {x}")).Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
 	}
 	File.WriteAllLines(HOST_FILE, lines);
+	DnsFlusher.Flush();
 }
