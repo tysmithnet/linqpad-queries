@@ -46,6 +46,9 @@ public class Options
 	
 	[Command("unblock")]
 	public UnblockOptions UnblockOptions { get; set; }
+	
+	[Parameter("-w", "--www", Description="Automatically include the www. subdomain")
+	public bool IncludeWwwDomain { get; set; }
 }
 
 public class UnblockOptions
@@ -109,13 +112,21 @@ void Main(string[] args)
 		foreach(var domain in options.BlockOptions.Domains)
 		{
 			var newLine = $"127.0.0.1 {domain}";
+			var www = $"127.0.0.1 www.{domain}";
 			if(!lines.Contains(newLine))
 				lines.Add(newLine);
+			if(!lines.Contains(www) && options.IncludeWwwDomain)
+				lines.Add(www);
 		}
 	}
 	else if(options.UnblockOptions != null)
 	{
-		lines = lines.Except(options.UnblockOptions.Domains.Select(x => $"127.0.0.1 {x}")).Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+		var altered = lines.Except(options.UnblockOptions.Domains.Select(x => $"127.0.0.1 {x}")).Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+		if(options.IncludeWwwDomain)
+		{
+			altered = lines.Except(options.UnblockOptions.Domains.Select(x => $"127.0.0.1 www.{x}")).Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+		}
+		lines = altered;
 	}
 	File.WriteAllLines(HOST_FILE, lines);
 	DnsFlusher.Flush();
