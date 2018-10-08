@@ -47,7 +47,7 @@ public class Options
 	[Command("unblock")]
 	public UnblockOptions UnblockOptions { get; set; }
 	
-	[Parameter("-w", "--www", Description="Automatically include the www. subdomain")
+	[Parameter("-w", "--www", Description="Automatically include the www. subdomain")]
 	public bool IncludeWwwDomain { get; set; }
 }
 
