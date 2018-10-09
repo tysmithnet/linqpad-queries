@@ -78,6 +78,7 @@ static int Block(BlockOptions options)
 	options.DomainsToBlock = options.DomainsToBlock.OrderBy(x => x).Distinct();
 	var newGuys = options.IncludeWwwDomain ? options.DomainsToBlock.SelectMany(x => new[] { x, $"www.{x}" }) : options.DomainsToBlock;
 	File.WriteAllLines(HOST_FILE, lines.Concat(newGuys.Select(x => $"127.0.0.1 {x}")));
+	DnsFlusher.Flush();
 	return 0;
 }
 
@@ -88,6 +89,7 @@ static int UnBlock(UnBlockOptions options)
 	var newGuys = options.IncludeWwwDomain ? options.DomainsToBlock.SelectMany(x => new[] { x, $"www.{x}" }) : options.DomainsToBlock;
 	lines = lines.Except(newGuys.Select(x => $"127.0.0.1 {x}")).Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
 	File.WriteAllLines(HOST_FILE, lines);
+	DnsFlusher.Flush();
 	return 0;
 }
 
