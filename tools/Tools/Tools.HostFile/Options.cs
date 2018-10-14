@@ -27,12 +27,5 @@ namespace Tools.HostFile
         /// <value><c>true</c> if [include WWW subdomain]; otherwise, <c>false</c>.</value>
         [Option('w', "www", HelpText = "Include www. subdomain automatically", Default = true)]
         public bool IncludeWwwSubdomain { get; set; }
-
-        /// <summary>
-        ///     Gets or sets a value indicating whether this instance is logging enabled.
-        /// </summary>
-        /// <value><c>true</c> if this instance is logging enabled; otherwise, <c>false</c>.</value>
-        [Option('l', "log", HelpText = "Specify if logging is enabled")]
-        public bool IsLoggingEnabled { get; set; }
     }
 }

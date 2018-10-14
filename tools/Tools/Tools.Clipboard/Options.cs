@@ -27,14 +27,7 @@ namespace Tools.Clipboard
         /// <value><c>true</c> if [automatic accept]; otherwise, <c>false</c>.</value>
         [Option('a', "auto-accept", HelpText = "Always take the default option if being prompted")]
         public bool AutoAccept { get; set; }
-
-        /// <summary>
-        ///     Gets or sets a value indicating whether this instance is logging enabled.
-        /// </summary>
-        /// <value><c>true</c> if this instance is logging enabled; otherwise, <c>false</c>.</value>
-        [Option('l', "log", HelpText = "Enable logging", Default = false)]
-        public bool IsLoggingEnabled { get; set; }
-
+        
         /// <summary>
         ///     Gets or sets a value indicating whether this instance is overwite.
         /// </summary>

@@ -49,8 +49,17 @@ namespace Tools.Clipboard
         [STAThread]
         public static int Main(string[] args)
         {
-            new Parser(settings => settings.CaseInsensitiveEnumValues = true)
-                .ParseArguments<SortOptions, ReverseOptions, ZipOptions, ListOptions>(args)
+            var parser = new Parser(settings =>
+            {
+                settings.CaseInsensitiveEnumValues = true;
+                settings.CaseSensitive = false;
+                settings.HelpWriter = Parser.Default.Settings.HelpWriter;
+                settings.EnableDashDash = Parser.Default.Settings.EnableDashDash;
+                settings.IgnoreUnknownArguments = Parser.Default.Settings.IgnoreUnknownArguments;
+                settings.MaximumDisplayWidth = 104;
+                settings.ParsingCulture = Parser.Default.Settings.ParsingCulture;
+            });
+            parser.ParseArguments<SortOptions, ReverseOptions, ZipOptions, ListOptions>(args)
                 .MapResult((SortOptions o) =>
                     {
                         Sort(o);
