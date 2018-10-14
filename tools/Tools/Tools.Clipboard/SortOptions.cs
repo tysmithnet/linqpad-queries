@@ -20,7 +20,7 @@ namespace Tools.Clipboard
     ///     Class SortOptions.
     /// </summary>
     /// <seealso cref="Tools.Clipboard.Options" />
-    [Verb("sort")]
+    [Verb("sort", HelpText = "Sort clipboard contents")]
     public class SortOptions : Options
     {
         /// <summary>

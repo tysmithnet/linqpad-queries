@@ -20,7 +20,7 @@ namespace Tools.Clipboard
     ///     Class ReverseOptions.
     /// </summary>
     /// <seealso cref="Tools.Clipboard.Options" />
-    [Verb("rev")]
+    [Verb("rev", HelpText = "Reverse clipboard contents")]
     public class ReverseOptions : Options
     {
     }

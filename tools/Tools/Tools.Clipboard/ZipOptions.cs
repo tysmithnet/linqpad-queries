@@ -20,7 +20,7 @@ namespace Tools.Clipboard
     ///     Class ZipOptions.
     /// </summary>
     /// <seealso cref="Tools.Clipboard.Options" />
-    [Verb("zip")]
+    [Verb("zip", HelpText = "Add all files currently on the clipboard to a zip archive")]
     public class ZipOptions : Options
     {
         /// <summary>
