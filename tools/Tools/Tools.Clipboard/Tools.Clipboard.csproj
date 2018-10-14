@@ -135,6 +135,8 @@
   <ItemGroup>
     <Compile Include="ListCommand.cs" />
     <Compile Include="ListOptions.cs" />
+    <Compile Include="MemeCommand.cs" />
+    <Compile Include="MemeOptions.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="ClipboardProgram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

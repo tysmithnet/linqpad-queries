@@ -31,7 +31,7 @@ namespace Tools.Clipboard
         ///     Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
-        [Option('n', "name", HelpText = "Name of the zip file", Required = true)]
-        public string Name { get; set; }
+        [Option('f', "out-file", HelpText = "Output filename", Required = true)]
+        public string FileName { get; set; }
     }
 }
