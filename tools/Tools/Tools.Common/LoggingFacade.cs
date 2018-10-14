@@ -9,9 +9,15 @@ using Serilog.Sinks.Elasticsearch;
 
 namespace Tools.Common
 {
-    public class LoggingSetup
+    public static class LoggingFacade
     {
         public static void SetupLogger()
+        {
+            CreateLogger();
+            AppDomain.CurrentDomain.DomainUnload += (sender, args) => { Log.CloseAndFlush(); };
+        }
+
+        private static void CreateLogger()
         {
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
@@ -19,7 +25,14 @@ namespace Tools.Common
                 .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri("localhost:9200")))
                 .WriteTo.Console()
                 .CreateLogger();
-            AppDomain.CurrentDomain.DomainUnload += (sender, args) => { Log.CloseAndFlush(); };
+        }
+
+        public static void Disable()
+        {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Debug()
+                .CreateLogger();
         }
     }
 }

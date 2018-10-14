@@ -37,7 +37,7 @@ namespace Tools.Clipboard
         internal static ILogger Log;
         static ClipboardProgram()
         {
-            LoggingSetup.SetupLogger();
+            LoggingFacade.SetupLogger();
             Log = Serilog.Log.ForContext<ClipboardProgram>();
         }
         

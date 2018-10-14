@@ -35,7 +35,7 @@ namespace Tools.HostFile
         /// </summary>
         static HostFileProgram()
         {
-            LoggingSetup.SetupLogger();
+            LoggingFacade.SetupLogger();
             Log = Serilog.Log.ForContext<HostFileProgram>();
         }
 
