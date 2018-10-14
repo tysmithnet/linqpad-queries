@@ -32,7 +32,7 @@ namespace Tools.Clipboard
         ///     Gets or sets a value indicating whether this instance is logging enabled.
         /// </summary>
         /// <value><c>true</c> if this instance is logging enabled; otherwise, <c>false</c>.</value>
-        [Option('l', "log", HelpText = "Enable logging")]
+        [Option('l', "log", HelpText = "Enable logging", Default = false)]
         public bool IsLoggingEnabled { get; set; }
 
         /// <summary>

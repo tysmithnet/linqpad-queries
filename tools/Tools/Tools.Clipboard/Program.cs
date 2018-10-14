@@ -19,6 +19,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using CommandLine;
+using Humanizer;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using Serilog;
@@ -28,7 +29,7 @@ using MsClipboard = System.Windows.Forms.Clipboard;
 namespace Tools.Clipboard
 {
     /// <summary>
-    ///     Class Program.
+    ///     Program to interact and do various convenience actions by the clipboard
     /// </summary>
     internal class Program
     {
@@ -48,38 +49,39 @@ namespace Tools.Clipboard
                         return 0;
                     }, (ReverseOptions o) =>
                     {
+                        SetupLogger(o);
                         Reverse(o);
                         return 0;
                     },
                     (ZipOptions o) =>
                     {
+                        SetupLogger(o);
                         Zip(o);
                         return 0;
                     },
                     errs =>
                     {
+                        SetupLogger(new Options
+                        {
+                            IsLoggingEnabled = true
+                        });
                         foreach (var error in errs) Log.Fatal("{Error}", error);
                         return 1;
                     });
+            Log.CloseAndFlush();
             return 0;
         }
 
-        private class AddEntryResult
-        {
-            public FileInfo Info { get; set; }
-            public bool Success { get; set; }
-        }
-
         /// <summary>
-        ///     Adds the entry.
+        ///     Adds a file to the zip archive
         /// </summary>
         /// <param name="options">The options.</param>
         /// <param name="file">The file.</param>
         /// <param name="prefix">The prefix.</param>
         /// <param name="zip">The zip.</param>
+        /// <returns>AddEntryResult.</returns>
         private static AddEntryResult AddEntry(ZipOptions options, string file, string prefix, ZipOutputStream zip)
         {
-            var result = new AddEntryResult();
             var fileInfo = new FileInfo(file);
             var entryFileName = ZipEntry.CleanName(file.Substring(prefix.Length));
             ZipEntry entry;
@@ -97,10 +99,10 @@ namespace Tools.Clipboard
                 Log.Error(e, "Problem creating zip entry for {File}", file);
                 if (!options.ContinueOnError)
                     throw;
-                return new AddEntryResult()
+                return new AddEntryResult
                 {
                     Success = false,
-                    Info = fileInfo,
+                    Info = fileInfo
                 };
             }
 
@@ -121,9 +123,8 @@ namespace Tools.Clipboard
             }
 
             zip.CloseEntry();
-            return new AddEntryResult()
+            return new AddEntryResult
             {
-                
                 Info = fileInfo,
                 Success = true
             };
@@ -238,7 +239,7 @@ namespace Tools.Clipboard
         }
 
         /// <summary>
-        ///     Zips the specified options.
+        ///     Zips the files that are on the clipboard
         /// </summary>
         /// <param name="options">The options.</param>
         private static void Zip(ZipOptions options)
@@ -255,7 +256,7 @@ namespace Tools.Clipboard
             var prefix = CalculatePrefix(allFiles);
 
             long size = 0;
-            int success = 0;
+            var success = 0;
             using (var fs = new FileStream(options.Name, FileMode.OpenOrCreate))
             using (var zip = new ZipOutputStream(fs))
             {
@@ -264,7 +265,7 @@ namespace Tools.Clipboard
                     var res = AddEntry(options, file, prefix, zip);
                     if (res.Success)
                     {
-                        Log.Information("Add {File}", res.Info.FullName);
+                        Log.Information("Added {File}", res.Info.FullName);
                         success++;
                         size += res.Info.Length;
                     }
@@ -274,6 +275,7 @@ namespace Tools.Clipboard
                     }
                 }
             }
+
             var zipFile = new FileInfo(options.Name);
             if (options.IsOverwite)
             {
@@ -284,7 +286,26 @@ namespace Tools.Clipboard
                 MsClipboard.SetFileDropList(collection);
             }
 
-            Log.Information("{ZipFile} {FileCount} {Ratio}", zipFile, success, zipFile.Length / size);
+            Log.Information("Created: {ZipFile} Files: {FileCount} Size: {Size}", zipFile, success,
+                zipFile.Length.Bytes().Humanize());
+        }
+
+        /// <summary>
+        ///     Class AddEntryResult.
+        /// </summary>
+        private class AddEntryResult
+        {
+            /// <summary>
+            ///     Gets or sets the information.
+            /// </summary>
+            /// <value>The information.</value>
+            public FileInfo Info { get; set; }
+
+            /// <summary>
+            ///     Gets or sets a value indicating whether this <see cref="AddEntryResult" /> is success.
+            /// </summary>
+            /// <value><c>true</c> if success; otherwise, <c>false</c>.</value>
+            public bool Success { get; set; }
         }
     }
 }
