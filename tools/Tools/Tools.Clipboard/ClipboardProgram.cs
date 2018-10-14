@@ -23,7 +23,6 @@ using Humanizer;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using Serilog;
-using Serilog.Events;
 using Tools.Common;
 using MsClipboard = System.Windows.Forms.Clipboard;
 
@@ -34,13 +33,14 @@ namespace Tools.Clipboard
     /// </summary>
     internal class ClipboardProgram
     {
-        internal static ILogger Log;
         static ClipboardProgram()
         {
             LoggingFacade.SetupLogger();
             Log = Serilog.Log.ForContext<ClipboardProgram>();
         }
-        
+
+        internal static ILogger Log;
+
         /// <summary>
         ///     Defines the entry point of the application.
         /// </summary>
@@ -49,7 +49,8 @@ namespace Tools.Clipboard
         [STAThread]
         public static int Main(string[] args)
         {
-            Parser.Default.ParseArguments<SortOptions, ReverseOptions, ZipOptions>(args)
+            new Parser(settings => settings.CaseInsensitiveEnumValues = true)
+                .ParseArguments<SortOptions, ReverseOptions, ZipOptions, ListOptions>(args)
                 .MapResult((SortOptions o) =>
                     {
                         Sort(o);
@@ -62,6 +63,11 @@ namespace Tools.Clipboard
                     (ZipOptions o) =>
                     {
                         Zip(o);
+                        return 0;
+                    },
+                    (ListOptions o) =>
+                    {
+                        List(o);
                         return 0;
                     },
                     errs =>
@@ -193,6 +199,21 @@ namespace Tools.Clipboard
             if (options.IsQuiet)
                 return;
             Console.WriteLine(newText);
+        }
+
+        private static int List(ListOptions options)
+        {
+            switch (options.Source)
+            {
+                case Source.Text:
+                    Console.WriteLine(MsClipboard.GetText());
+                    return 0;
+                case Source.Files:
+                    foreach (var file in MsClipboard.GetFileDropList()) Console.WriteLine(file);
+                    return 0;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         /// <summary>
