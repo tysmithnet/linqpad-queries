@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -274,8 +275,16 @@ namespace Tools.Clipboard
                 }
             }
             var zipFile = new FileInfo(options.Name);
+            if (options.IsOverwite)
+            {
+                var collection = new StringCollection
+                {
+                    zipFile.FullName
+                };
+                MsClipboard.SetFileDropList(collection);
+            }
+
             Log.Information("{ZipFile} {FileCount} {Ratio}", zipFile, success, zipFile.Length / size);
-            ;
         }
     }
 }
