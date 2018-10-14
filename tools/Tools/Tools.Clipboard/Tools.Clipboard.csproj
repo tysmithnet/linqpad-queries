@@ -60,9 +60,6 @@
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.2.7.1\lib\net46\Serilog.dll</HintPath>
     </Reference>
-    <Reference Include="Serilog.Sinks.Console, Version=3.1.1.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.Sinks.Console.3.1.1\lib\net45\Serilog.Sinks.Console.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Console, Version=4.0.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -117,7 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Options.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="ClipboardProgram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReverseOptions.cs" />
     <Compile Include="SortOptions.cs" />
@@ -138,6 +135,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Tools.Common\Tools.Common.csproj">
+      <Project>{17e3ef75-f2ca-414a-aa08-739c87b32ac1}</Project>
+      <Name>Tools.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

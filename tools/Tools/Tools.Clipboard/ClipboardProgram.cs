@@ -24,6 +24,7 @@ using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using Serilog;
 using Serilog.Events;
+using Tools.Common;
 using MsClipboard = System.Windows.Forms.Clipboard;
 
 namespace Tools.Clipboard
@@ -31,8 +32,15 @@ namespace Tools.Clipboard
     /// <summary>
     ///     Program to interact and do various convenience actions by the clipboard
     /// </summary>
-    internal class Program
+    internal class ClipboardProgram
     {
+        internal static ILogger Log;
+        static ClipboardProgram()
+        {
+            LoggingSetup.SetupLogger();
+            Log = Serilog.Log.ForContext<ClipboardProgram>();
+        }
+        
         /// <summary>
         ///     Defines the entry point of the application.
         /// </summary>
@@ -44,31 +52,23 @@ namespace Tools.Clipboard
             Parser.Default.ParseArguments<SortOptions, ReverseOptions, ZipOptions>(args)
                 .MapResult((SortOptions o) =>
                     {
-                        SetupLogger(o);
                         Sort(o);
                         return 0;
                     }, (ReverseOptions o) =>
                     {
-                        SetupLogger(o);
                         Reverse(o);
                         return 0;
                     },
                     (ZipOptions o) =>
                     {
-                        SetupLogger(o);
                         Zip(o);
                         return 0;
                     },
                     errs =>
                     {
-                        SetupLogger(new Options
-                        {
-                            IsLoggingEnabled = true
-                        });
                         foreach (var error in errs) Log.Fatal("{Error}", error);
                         return 1;
                     });
-            Log.CloseAndFlush();
             return 0;
         }
 
@@ -204,18 +204,6 @@ namespace Tools.Clipboard
             var lines = GetClipboardText();
             var newText = string.Join(Environment.NewLine, lines.Reverse());
             HandleNewText(options, newText);
-        }
-
-        /// <summary>
-        ///     Setups the logger.
-        /// </summary>
-        /// <param name="o">The o.</param>
-        private static void SetupLogger(Options o)
-        {
-            if (o.IsLoggingEnabled)
-                Log.Logger = new LoggerConfiguration()
-                    .WriteTo.Console(LogEventLevel.Debug)
-                    .CreateLogger();
         }
 
         /// <summary>
