@@ -47,7 +47,7 @@ namespace Tools.Clipboard
 
             long size = 0;
             var success = 0;
-            using (var fs = new FileStream(options.Name, FileMode.OpenOrCreate))
+            using (var fs = new FileStream(options.FileName, FileMode.OpenOrCreate))
             using (var zip = new ZipOutputStream(fs))
             {
                 foreach (var file in allFiles)
@@ -66,7 +66,7 @@ namespace Tools.Clipboard
                 }
             }
 
-            var zipFile = new FileInfo(options.Name);
+            var zipFile = new FileInfo(options.FileName);
             if (options.IsOverwite)
             {
                 var collection = new StringCollection
