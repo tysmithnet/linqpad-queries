@@ -7,7 +7,7 @@
     <ProjectGuid>{9F3112B9-E922-4B5E-B3E8-AEA28B02159B}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Tools.Clipboard</RootNamespace>
-    <AssemblyName>clip</AssemblyName>
+    <AssemblyName>tclip</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

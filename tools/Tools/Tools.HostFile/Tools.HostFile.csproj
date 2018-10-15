@@ -7,7 +7,7 @@
     <ProjectGuid>{A329AA6C-F235-4841-A3A2-37CEB5745C3F}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Tools.HostFile</RootNamespace>
-    <AssemblyName>hosts</AssemblyName>
+    <AssemblyName>thosts</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
