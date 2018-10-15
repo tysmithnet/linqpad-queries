@@ -61,8 +61,7 @@ namespace Tools.Clipboard
         {
             if (options.IsOverwite)
             {
-                Log.Information("Overwriting clipboard. {Preview}",
-                    new string(newText.Take(100).Concat("...").ToArray()));
+                Log.Information("Overwriting clipboard.");
                 MsClipboard.SetText(newText);
             }
 
